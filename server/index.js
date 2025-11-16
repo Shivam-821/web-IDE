@@ -7,7 +7,7 @@ var ptyProcess = pty.spawn("bash", [], {
   name: "xterm-color",
   cols: 80,
   rows: 30,
-  cwd: process.env.INIT_CWD,
+  cwd: process.env.INIT_CWD + '/user',
   env: process.env,
 });
 
