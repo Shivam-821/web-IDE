@@ -12,6 +12,11 @@ const Terminal = () => {
     isRender.current = true;
     const term = new XTermianl({
       rows: 20,
+      theme: {
+        background: "#000505",
+        foreground: "#ffffff",
+        cursor: "#7bf1a2",
+      },
     });
     term.open(termianlRef.current);
 

@@ -1,13 +1,15 @@
 const http = require("http");
 const express = require("express");
 const { Server: SocketServer } = require("socket.io");
+const fs = require("fs/promises");
 const pty = require("node-pty");
+const path = require("path");
 
 var ptyProcess = pty.spawn("bash", [], {
   name: "xterm-color",
   cols: 80,
   rows: 30,
-  cwd: process.env.INIT_CWD + '/user',
+  cwd: process.env.INIT_CWD + "/user",
   env: process.env,
 });
 
@@ -31,4 +33,32 @@ io.on("connection", (socket) => {
   });
 });
 
+app.get("/files", async (req, res) => {
+  const fileTree = await generateFileTree("./user");
+  return res.json({ tree: fileTree });
+});
+
 server.listen(9000, () => console.log(`🐋 Docker server running on port 9000`));
+
+async function generateFileTree(directory) {
+  const tree = {};
+
+  async function buildTree(currentDir, currentTree) {
+    const files = fs.readdir(currentDir);
+    for (const file of files) {
+      const filePath = path.join(currentDir, file);
+      const stat = await fs.stat(filePath);
+
+      if (stat.isDirectory) {
+        currentTree[file] = {};
+        await buildTree(filePath, currentTree[file]);
+      } else {
+        currentTree[file] = null;
+      }
+    }
+  }
+
+  await buildTree(directory, tree);
+
+  return tree;
+}
