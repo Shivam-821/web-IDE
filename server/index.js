@@ -4,6 +4,8 @@ const { Server: SocketServer } = require("socket.io");
 const fs = require("fs/promises");
 const pty = require("node-pty");
 const path = require("path");
+const cors = require("cors");
+const chokidar = require("chokidar");
 
 var ptyProcess = pty.spawn("bash", [], {
   name: "xterm-color",
@@ -18,8 +20,17 @@ const server = http.createServer(app);
 const io = new SocketServer({
   cors: "*",
 });
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 io.attach(server);
+
+chokidar.watch("./user").on("all", (event, path) => {
+  io.emit("file:refresh", path)
+})
 
 ptyProcess.onData((data) => {
   io.emit("terminal:data", data);
@@ -44,12 +55,12 @@ async function generateFileTree(directory) {
   const tree = {};
 
   async function buildTree(currentDir, currentTree) {
-    const files = fs.readdir(currentDir);
+    const files = await fs.readdir(currentDir);
     for (const file of files) {
       const filePath = path.join(currentDir, file);
       const stat = await fs.stat(filePath);
 
-      if (stat.isDirectory) {
+      if (stat.isDirectory()) {
         currentTree[file] = {};
         await buildTree(filePath, currentTree[file]);
       } else {
