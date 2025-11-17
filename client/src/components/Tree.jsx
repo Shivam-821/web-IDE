@@ -9,7 +9,7 @@ const FileTreeNode = ({ fileName, nodes, onSelect, path }) => {
       }}
     >
       <p
-        style={{ marginLeft: "10px", marginTop: "2px" }}
+        style={{ paddingLeft: "10px", paddingTop: "2px" }}
         className={`${
           isDir
             ? "hover:bg-green-700/70"
@@ -20,13 +20,9 @@ const FileTreeNode = ({ fileName, nodes, onSelect, path }) => {
         {fileName}
       </p>
       {nodes && (
-        <ul>
+        <ul style={{ paddingLeft: "12px" }}>
           {Object.keys(nodes).map((child) => (
-            <li
-              key={child}
-              style={{ marginLeft: "12px" }}
-              className="outline-none"
-            >
+            <li key={child}>
               <FileTreeNode
                 fileName={child}
                 nodes={nodes[child]}

@@ -1,1 +1,3 @@
-console.log("Hello from new.js")
+console.log("Hello from the UI part!!")
+
+const xy = 3

@@ -32,8 +32,8 @@ io.attach(server);
 
 // for any change in file structure
 chokidar.watch("./user").on("all", (event, path) => {
-  io.emit("file:refresh", path)
-})
+  io.emit("file:refresh", path);
+});
 
 // send-back the output of user terminal input
 ptyProcess.onData((data) => {
@@ -47,6 +47,10 @@ io.on("connection", (socket) => {
   socket.on("terminal:write", (data) => {
     ptyProcess.write(data);
   });
+
+  socket.on("file:change", async ({ path, content }) => {
+    await fs.writeFile(`./user${path}`, content);
+  });
 });
 
 // route to fetch the file structure
@@ -55,9 +59,15 @@ app.get("/files", async (req, res) => {
   return res.json({ tree: fileTree });
 });
 
+// route to fetch the content of the file
+app.get("/files/content", async (req, res) => {
+  const path = req.query.path;
+  const content = await fs.readFile(`./user${path}`, "utf-8");
+  return res.json({ content });
+});
+
 // listening to the server
 server.listen(9000, () => console.log(`🐋 Docker server running on port 9000`));
-
 
 // helper function to generate the file structure
 async function generateFileTree(directory) {
