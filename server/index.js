@@ -7,6 +7,7 @@ const path = require("path");
 const cors = require("cors");
 const chokidar = require("chokidar");
 
+// terminal executioon
 var ptyProcess = pty.spawn("bash", [], {
   name: "xterm-color",
   cols: 80,
@@ -15,6 +16,7 @@ var ptyProcess = pty.spawn("bash", [], {
   env: process.env,
 });
 
+// dependencies
 const app = express();
 const server = http.createServer(app);
 const io = new SocketServer({
@@ -28,14 +30,17 @@ app.use(
 
 io.attach(server);
 
+// for any change in file structure
 chokidar.watch("./user").on("all", (event, path) => {
   io.emit("file:refresh", path)
 })
 
+// send-back the output of user terminal input
 ptyProcess.onData((data) => {
   io.emit("terminal:data", data);
 });
 
+// connecting to the websocket server
 io.on("connection", (socket) => {
   console.log("socket connected: ", socket.id);
 
@@ -44,13 +49,17 @@ io.on("connection", (socket) => {
   });
 });
 
+// route to fetch the file structure
 app.get("/files", async (req, res) => {
   const fileTree = await generateFileTree("./user");
   return res.json({ tree: fileTree });
 });
 
+// listening to the server
 server.listen(9000, () => console.log(`🐋 Docker server running on port 9000`));
 
+
+// helper function to generate the file structure
 async function generateFileTree(directory) {
   const tree = {};
 
