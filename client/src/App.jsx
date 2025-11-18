@@ -72,6 +72,7 @@ function App() {
     getFileTree();
   }, []);
 
+  // when any change is being done in file tree, like creation or deletion
   useEffect(() => {
     socket.on("file:refresh", getFileTree);
     return () => {
@@ -133,7 +134,10 @@ function App() {
               defaultSize={35}
               className="border-t border-green-600"
             >
-              <div style={{paddingLeft: "5px"}} className="bg-green-700/40 text-[9px] border-t border-green-600/60 font-sans text-green-100">
+              <div
+                style={{ paddingLeft: "5px" }}
+                className="bg-green-700/40 text-[9px] border-t border-green-600/60 font-sans text-green-100"
+              >
                 TERMINAL
               </div>
               <div>

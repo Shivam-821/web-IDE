@@ -7,6 +7,17 @@ const Terminal = () => {
   const termianlRef = useRef(null);
   const isRender = useRef(false);
 
+  // to run the first command
+  const firstCommandOnTerminal = async () => {
+    const dataJson = await fetch("http://localhost:9000/initial-execution");
+    const data = await dataJson.json();
+    term.write(data);
+  };
+
+  useEffect(() => {
+    firstCommandOnTerminal();
+  }, []);
+
   useEffect(() => {
     if (isRender.current) return;
     isRender.current = true;
