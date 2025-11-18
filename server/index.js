@@ -66,6 +66,24 @@ app.get("/files/content", async (req, res) => {
   return res.json({ content });
 });
 
+app.get("/initial-execution", async (req, res) => {
+  let output = "";
+
+  // Temporary listener
+  const listener = (data) => {
+    output += data;
+  };
+  ptyProcess.onData(listener);
+
+  ptyProcess.write("clear\n");
+
+  // Wait a short time to collect output
+  setTimeout(() => {
+    ptyProcess.removeListener("data", listener);
+    res.json({ output });
+  }, 200);
+});
+
 // listening to the server
 server.listen(9000, () => console.log(`🐋 Docker server running on port 9000`));
 
