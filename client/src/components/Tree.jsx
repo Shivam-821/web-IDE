@@ -1,26 +1,35 @@
+import { useState } from "react";
+
 const FileTreeNode = ({ fileName, nodes, onSelect, path }) => {
   const isDir = !!nodes;
+  const [open, setOpen] = useState(false);
+
+  const toggle = (e) => {
+    e.stopPropagation();
+    if (isDir) {
+      setOpen(!open);
+    } else {
+      onSelect(path);
+    }
+  };
+
   return (
-    <div
-      onClick={(e) => {
-        e.stopPropagation();
-        if (isDir) return;
-        onSelect(path);
-      }}
-    >
+    <div style={{ userSelect: "none" }}>
       <p
-        style={{ paddingLeft: "10px", paddingTop: "2px" }}
+        onClick={toggle}
         className={`${
           isDir
-            ? "hover:bg-green-700/70"
+            ? "hover:bg-green-700/70 cursor-pointer"
             : "hover:bg-green-400/30 cursor-pointer"
         }`}
+        style={{ paddingLeft: "10px", paddingTop: "2px" }}
       >
-        {isDir ? "🗁 " : "🗎 "}
+        {isDir ? (open ? "⌄ 🗁 " : "˃ 🗀 ") : "🗎 "}
         {fileName}
       </p>
-      {nodes && (
-        <ul style={{ paddingLeft: "12px" }}>
+
+      {isDir && open && (
+        <ul style={{ paddingLeft: "16px" }}>
           {Object.keys(nodes).map((child) => (
             <li key={child}>
               <FileTreeNode
@@ -39,9 +48,9 @@ const FileTreeNode = ({ fileName, nodes, onSelect, path }) => {
 
 const FileTree = ({ tree, onSelect }) => {
   return (
-    <>
+    <div className="pt-2">
       <FileTreeNode fileName="/" nodes={tree} path="" onSelect={onSelect} />
-    </>
+    </div>
   );
 };
 
