@@ -14,7 +14,6 @@ const FileTreeNode = ({ fileName, nodes, onSelect, path }) => {
     }
   };
 
-  console.log(ChevronDown);
   return (
     <div style={{ userSelect: "none" }}>
       <p
