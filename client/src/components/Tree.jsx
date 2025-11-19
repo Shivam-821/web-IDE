@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ChevronDown, ChevronRight } from "lucide-react";
 
 const FileTreeNode = ({ fileName, nodes, onSelect, path }) => {
   const isDir = !!nodes;
@@ -13,6 +14,7 @@ const FileTreeNode = ({ fileName, nodes, onSelect, path }) => {
     }
   };
 
+  console.log(ChevronDown);
   return (
     <div style={{ userSelect: "none" }}>
       <p
@@ -21,10 +23,22 @@ const FileTreeNode = ({ fileName, nodes, onSelect, path }) => {
           isDir
             ? "hover:bg-green-700/70 cursor-pointer"
             : "hover:bg-green-400/30 cursor-pointer"
-        }`}
+        } flex`}
         style={{ paddingLeft: "10px", paddingTop: "2px" }}
       >
-        {isDir ? (open ? "⌄ 🗁 " : "˃ 🗀 ") : "🗎 "}
+        {isDir ? (
+          open ? (
+            <div style={{ marginRight: "4px" }} className="flex items-center">
+              <ChevronDown className="size-3.5" /> {" 🗁 "}
+            </div>
+          ) : (
+            <div style={{ marginRight: "4px" }} className="flex items-center">
+              <ChevronRight className="size-3.5" /> {" 🗀 "}
+            </div>
+          )
+        ) : (
+          "🗎 "
+        )}
         {fileName}
       </p>
 
