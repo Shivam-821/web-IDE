@@ -11,7 +11,7 @@ import AceEditor from "react-ace";
 
 import "ace-builds/src-noconflict/ace";
 import "ace-builds/src-noconflict/mode-javascript";
-import "ace-builds/src-noconflict/theme-monokai";
+import "ace-builds/src-noconflict/theme-twilight";
 import "ace-builds/src-noconflict/worker-javascript";
 
 function App() {
@@ -121,7 +121,7 @@ function App() {
                   width="100%"
                   height="100%"
                   mode="javascript"
-                  theme="monokai"
+                  theme="twilight"
                   name="ace-editor"
                   value={code}
                   onChange={(e) => setCode(e)}
