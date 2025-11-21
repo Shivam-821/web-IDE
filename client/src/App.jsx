@@ -117,16 +117,29 @@ function App() {
                     </span>
                   </p>
                 )}
-                <AceEditor
-                  width="100%"
-                  height="100%"
-                  mode="javascript"
-                  theme="twilight"
-                  name="ace-editor"
-                  value={code}
-                  onChange={(e) => setCode(e)}
-                  setOptions={{ useWorker: false }}
-                />
+                {selectedFilePath ? (
+                  <AceEditor
+                    width="100%"
+                    height="100%"
+                    mode="javascript"
+                    theme="twilight"
+                    name="ace-editor"
+                    value={code}
+                    onChange={(e) => setCode(e)}
+                    setOptions={{ useWorker: false }}
+                  />
+                ) : (
+                  <div className="flex flex-col items-center justify-center  h-full font-bold">
+                    <div className="flex flex-col items-center justify-center">
+                      <img
+                        src="/web-ide_logo.png"
+                        alt="web-cloud logo"
+                        className="h-80 w-80 opacity-35"
+                      />
+                      <p className="text-green-200 text-xl">Web-Cloud Editor</p>
+                    </div>
+                  </div>
+                )}
               </div>
             </ResizablePanel>
             <ResizableHandle />

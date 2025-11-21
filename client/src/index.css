@@ -79,4 +79,5 @@ body {
 
 ::-webkit-scrollbar {
   width: 2px;
+  background-color: lightgreen;
 }
